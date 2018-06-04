@@ -88,7 +88,7 @@ public class ClientTwitter
                 connexion = seConnecter();
                 break;
             case "2":
-                nouveauCompte();
+                connexion = nouveauCompte();
                 break;
             default:
                 System.out.println("Choix incorrecte.");
@@ -110,7 +110,7 @@ public class ClientTwitter
         return Boolean.valueOf(webService.path("connect").put(String.class, user));
     }
     
-    public static void nouveauCompte(){
+    public static boolean nouveauCompte(){
         Scanner s = new Scanner(System.in);
         String login, password;
         System.out.print("Login: ");
@@ -118,7 +118,7 @@ public class ClientTwitter
         System.out.print("Password: ");
         password = s.next();
         User user = new User(login, password);
-        webService.path("create").put(user);
+        return Boolean.valueOf(webService.path("create").put(String.class, user));
     }
     
     public static void menuPrincipal(){

@@ -73,12 +73,13 @@ public class WebService {
     @PUT
     @Path("create")
     @Consumes(MediaType.APPLICATION_XML)
-    public void createNewUser(JAXBElement<User> u) throws RemoteException
+    public String createNewUser(JAXBElement<User> u) throws RemoteException
     {
         User user = u.getValue();
         String username = user.getUsername();
         String password = user.getPassword();
         service.createNewUser(username, password);
+        return "true";
     }
     
     @PUT
