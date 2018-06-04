@@ -7,6 +7,8 @@ import simo.mi6.project.tier2.WebService;
 import simo.mi6.project.tier3.TwitterDBService;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
+import common.User;
+import java.io.IOException;
 
 
 public class ClientTwitter
@@ -23,7 +25,14 @@ public class ClientTwitter
         //WebService webService = new WebService();
         webService = Client.create().resource("http://localhost:8080/twitter");
         //choixConnexion();
-        System.out.println(webService.path("users"));
+        
+        if (accueilAuthentification()){
+            System.out.print("Connecté");
+        } else {
+            System.out.print("NOOOOn");
+        }
+        
+        //System.out.println(webService.path("users").get(String.class));
         
         /*while(seConnecter()){
             menuPrincipal();
@@ -64,24 +73,32 @@ public class ClientTwitter
     }
     
     
-    public static void accueilAuthentification(){
+    public static boolean accueilAuthentification(){
         String x;
+        Boolean connexion = false;
         Scanner s = new Scanner(System.in);
         System.out.println("BONJOUR");
         System.out.println("1 - Me connecter");
         System.out.println("2 - Créer un compte");
         System.out.print("Choix : ");
         x = s.next();
-        if(x == "1"){
-            seConnecter();
-        } else {
-            if (x == "2"){
+        switch(x) 
+        {
+            case "1":
+                connexion = seConnecter();
+                break;
+            case "2":
                 nouveauCompte();
-            }
+                break;
+            default:
+                System.out.println("Choix incorrecte.");
+                System.out.println();
         }
+        return connexion;
     }
     
     public static boolean seConnecter(){
+        System.out.println("SE CONNECTER");
         Scanner s = new Scanner(System.in);
         String login, password;
         System.out.print("Login: ");
@@ -89,7 +106,9 @@ public class ClientTwitter
         System.out.print("Password: ");
         password = s.next();
         
-        return false;//webService.path("connexion/",login, password)); 
+        User user = new User(login, password);
+        System.out.print(webService.path("connect").put(boolean.class, user));
+        return webService.path("connect").put(boolean.class, user);
     }
     
     public static void nouveauCompte(){
@@ -124,15 +143,15 @@ public class ClientTwitter
         
         switch(x) 
         {
-                case "1":
-                    System.out.println("Lancement service web.");
-                    break;
-                case "2":
-                    System.out.println("Lancement corba.");
-                    break;
-                default:
-                    System.out.println("Choix incorrecte.");
-                    System.out.println();
+            case "1":
+                System.out.println("Lancement service web.");
+                break;
+            case "2":
+                System.out.println("Lancement corba.");
+                break;
+            default:
+                System.out.println("Choix incorrecte.");
+                System.out.println();
         }
     }
     
