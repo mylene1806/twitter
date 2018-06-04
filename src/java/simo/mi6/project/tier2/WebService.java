@@ -5,6 +5,7 @@
  */
 package simo.mi6.project.tier2;
 
+import common.User;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -16,6 +17,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
+import javax.xml.bind.JAXBElement;
 import simo.mi6.project.tier3.TwitterDBService;
 
 /**
@@ -40,7 +42,7 @@ public class WebService {
     }
 
     /**
-     * Retrieves representation of an instance of simo.mi6.project.tier2.ServiceTwitter
+     * Retrieves representation of an instance of simo.mi6.project.tier2.WebService
      * @return an instance of java.lang.String
      */
     @GET
@@ -56,20 +58,37 @@ public class WebService {
      */
     @GET
     @Path("users")
-    @Produces(MediaType.APPLICATION_XML)
+    @Produces("text/plain")
     public String getUsers() throws Exception {
         List<String> users = service.getAllUsers();
         
         String message = "";
         for(int i = 0; i < users.size(); i++) {
-            message += ("\t"+ i + "\t" + users.get(i) + "\n");
+            message += ("\t"+ i+1 + "\t" + users.get(i) + "\n");
         }
         
         return message;
     }
+    
+    @PUT
+    @Path("create")
+    @Consumes(MediaType.APPLICATION_XML)
+    public void createNewUser(JAXBElement<User> u) throws RemoteException
+    {
+        User user = u.getValue();
+        String username = user.getUsername();
+        
+        List<String> users = service.getAllUsers();
+        if(users.contains(username)) {
+            // compte déjà existant
+        } else {
+            String password = user.getPassword();
+            service.createNewUser(username, password);
+        }
+    }
 
     /**
-     * PUT method for updating or creating an instance of ServiceTwitter
+     * PUT method for updating or creating an instance of WebService
      * @param content representation for the resource
      */
     @PUT
