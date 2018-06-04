@@ -77,14 +77,21 @@ public class WebService {
     {
         User user = u.getValue();
         String username = user.getUsername();
+        String password = user.getPassword();
         
-        List<String> users = service.getAllUsers();
-        if(users.contains(username)) {
-            // compte déjà existant
-        } else {
-            String password = user.getPassword();
-            service.createNewUser(username, password);
-        }
+        service.createNewUser(username, password);
+    }
+    
+    @GET
+    @Path("connect")
+    @Consumes(MediaType.APPLICATION_XML)
+    public boolean isUserPasswordCorrect(JAXBElement<User> u) throws RemoteException
+    {
+        User user = u.getValue();
+        String username = user.getUsername();
+        String password = user.getPassword();
+        
+        return service.isUserPasswordCorrect(username, password);
     }
 
     /**
