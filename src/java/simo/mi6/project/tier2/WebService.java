@@ -6,6 +6,7 @@
 package simo.mi6.project.tier2;
 
 import java.rmi.Naming;
+import java.rmi.RemoteException;
 import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -23,7 +24,7 @@ import simo.mi6.project.tier3.TwitterDBService;
  * @author noemie
  */
 @Path("/")
-public class ServiceTwitter {
+public class WebService {
 
     @Context
     private UriInfo context;
@@ -32,7 +33,7 @@ public class ServiceTwitter {
     /**
      * Creates a new instance of ServiceTwitter
      */
-    public ServiceTwitter() throws Exception {
+    public WebService() throws Exception {
         // Appel au service RMI
         System.setProperty("java.rmi.server.hostname", "86.76.4.24");        
         service = (TwitterDBService) Naming.lookup("rmi://86.76.4.24:3200/TwitterDBService");
@@ -59,11 +60,10 @@ public class ServiceTwitter {
     public String getUsers() throws Exception {
         List<String> users = service.getAllUsers();
         
-        String message = "<users>";
+        String message = "";
         for(int i = 0; i < users.size(); i++) {
-            message += ("<user>" + users.get(i) + "</user>");
+            message += ("\t"+ i + "\t" + users.get(i) + "\n");
         }
-        message += "</users>";
         
         return message;
     }
