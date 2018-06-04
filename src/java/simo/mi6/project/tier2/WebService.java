@@ -64,7 +64,7 @@ public class WebService {
         
         String message = "";
         for(int i = 0; i < users.size(); i++) {
-            message += ("\t"+ i+1 + "\t" + users.get(i) + "\n");
+            message += ("\t"+ (i+1) + "\t" + users.get(i) + "\n");
         }
         
         return message;
