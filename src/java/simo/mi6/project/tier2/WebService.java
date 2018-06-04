@@ -78,19 +78,19 @@ public class WebService {
         User user = u.getValue();
         String username = user.getUsername();
         String password = user.getPassword();
-        
         service.createNewUser(username, password);
     }
     
     @PUT
     @Path("connect")
     @Consumes(MediaType.APPLICATION_XML)
-    public boolean isUserPasswordCorrect(JAXBElement<User> u) throws RemoteException
+    @Produces("text/plain")
+    public String isUserPasswordCorrect(JAXBElement<User> u) throws RemoteException
     {
         User user = u.getValue();
         String username = user.getUsername();
         String password = user.getPassword();
-        return service.isUserPasswordCorrect(username, password);
+        return Boolean.toString(service.isUserPasswordCorrect(username, password));
     }
 
     /**

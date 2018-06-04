@@ -29,10 +29,10 @@ public class ClientTwitter
         if (accueilAuthentification()){
             System.out.print("Connecté");
         } else {
-            System.out.print("NOOOOn");
+            System.out.print("Echec connexion");
         }
         
-        //System.out.println(webService.path("users").get(String.class));
+        System.out.println(webService.path("users").get(String.class));
         
         /*while(seConnecter()){
             menuPrincipal();
@@ -107,8 +107,7 @@ public class ClientTwitter
         password = s.next();
         
         User user = new User(login, password);
-        System.out.print(webService.path("connect").put(boolean.class, user));
-        return webService.path("connect").put(boolean.class, user);
+        return Boolean.valueOf(webService.path("connect").put(String.class, user));
     }
     
     public static void nouveauCompte(){
@@ -118,6 +117,8 @@ public class ClientTwitter
         login = s.next();
         System.out.print("Password: ");
         password = s.next();
+        User user = new User(login, password);
+        webService.path("create").put(user);
     }
     
     public static void menuPrincipal(){
@@ -129,6 +130,7 @@ public class ClientTwitter
         System.out.println("3 - Consulter les tweets d'un abonné");
         System.out.println("4 - Consulter mes tweets");
         System.out.println("5 - Ecrire un tweet");
+        System.out.println("6 - Déconnexion");
         String x = s.next();        
     }
     
