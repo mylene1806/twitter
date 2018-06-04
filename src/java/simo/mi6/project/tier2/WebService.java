@@ -12,6 +12,7 @@ import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -73,13 +74,13 @@ public class WebService {
     @PUT
     @Path("create")
     @Consumes(MediaType.APPLICATION_XML)
-    public String createNewUser(JAXBElement<User> u) throws RemoteException
+    public void createNewUser(JAXBElement<User> u) throws RemoteException
     {
         User user = u.getValue();
         String username = user.getUsername();
         String password = user.getPassword();
+        
         service.createNewUser(username, password);
-        return "true";
     }
     
     @PUT
@@ -91,7 +92,20 @@ public class WebService {
         User user = u.getValue();
         String username = user.getUsername();
         String password = user.getPassword();
+        
         return Boolean.toString(service.isUserPasswordCorrect(username, password));
+    }
+    
+    @DELETE
+    @Path("remove")
+    @Consumes(MediaType.APPLICATION_XML)
+    @Produces("text/plain")
+    public void removeUser(JAXBElement<User> u) throws RemoteException
+    {
+        User user = u.getValue();
+        String username = user.getUsername();
+        
+        service.removeUser(username);
     }
 
     /**
