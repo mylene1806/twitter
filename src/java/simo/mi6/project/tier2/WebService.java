@@ -17,6 +17,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBElement;
 import simo.mi6.project.tier3.TwitterDBService;
@@ -71,6 +72,11 @@ public class WebService {
         return message;
     }
     
+    /**
+     * Insérer un nouveau user
+     * @param u
+     * @throws RemoteException 
+     */
     @PUT
     @Path("create")
     @Consumes(MediaType.APPLICATION_XML)
@@ -83,6 +89,12 @@ public class WebService {
         service.createNewUser(username, password);
     }
     
+    /**
+     * Vérifie que le user est bien enregistré
+     * @param u
+     * @return
+     * @throws RemoteException 
+     */
     @PUT
     @Path("connect")
     @Consumes(MediaType.APPLICATION_XML)
@@ -96,6 +108,11 @@ public class WebService {
         return Boolean.toString(service.isUserPasswordCorrect(username, password));
     }
     
+    /**
+     * Supprimer un user
+     * @param u
+     * @throws RemoteException 
+     */
     @DELETE
     @Path("remove")
     @Consumes(MediaType.APPLICATION_XML)
@@ -107,13 +124,61 @@ public class WebService {
         
         service.removeUser(username);
     }
-
+    
     /**
-     * PUT method for updating or creating an instance of WebService
-     * @param content representation for the resource
+     * Récupérer les followers d'un user
+     * @param username
+     * @return
+     * @throws RemoteException 
      */
-    @PUT
-    @Consumes(MediaType.APPLICATION_XML)
-    public void putXml(String content) {
+    @GET
+    @Path("followers/{user}")
+    @Produces("text/plain")
+    public List<String> getUsersFollowing(@PathParam("user") String username) throws RemoteException
+    {        
+        return service.getUsersFollowing(username);
+    }
+    
+    /**
+     * Récupérer les users suivis par un user
+     * @param username
+     * @return
+     * @throws RemoteException 
+     */
+    @GET
+    @Path("followedBy/{user}")
+    @Produces("text/plain")
+    public List<String> getUsersFollowedBy(@PathParam("user") String username) throws RemoteException
+    {     
+        return service.getUsersFollowedBy(username);
+    }
+    
+    @GET
+    @Path("{follower}/follow/{followed}")
+    public void startFollowing(@PathParam("follower") String follower, @PathParam("followed") String followed) throws RemoteException
+    {
+        service.startFollowing(follower, followed);
+    }
+    
+    @GET
+    @Path("{follower}/stopFollow/{followed}")
+    public void stopFollowing(@PathParam("follower") String follower, @PathParam("followed") String followed) throws RemoteException
+    {
+        service.stopFollowing(follower, followed);
+    }
+    
+    @GET
+    @Path("{user}/tweet/{tweet}")
+    public void createNewTweet(@PathParam("user") String username, @PathParam("tweet") String tweet) throws RemoteException
+    {
+        service.createNewTweet(username, tweet);
+    }
+    
+    @GET
+    @Path("tweets/{user}")
+    @Produces("text/plain")
+    public List<String> getTweetsOfUser(@PathParam("user") String username) throws RemoteException
+    {
+        return service.getTweetsOfUser(username);
     }
 }
