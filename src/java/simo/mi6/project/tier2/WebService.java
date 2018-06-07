@@ -5,8 +5,7 @@
  */
 package simo.mi6.project.tier2;
 
-import common.User;
-import common.Users;
+import common.*;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -126,10 +125,18 @@ public class WebService {
      */
     @GET
     @Path("followers/{user}")
-    @Produces("text/plain")
-    public List<String> getUsersFollowing(@PathParam("user") String username) throws RemoteException
-    {        
-        return service.getUsersFollowing(username);
+    @Produces( { MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON } )
+    public Users getUsersFollowing(@PathParam("user") String username) throws RemoteException
+    {
+        List<String> listUsers = service.getUsersFollowing(username);
+        
+        Users users = new Users();
+        for(int i = 0; i < listUsers.size(); i++) {
+            User user = new User(listUsers.get(i), "");
+            users.liste.add(user);
+        }
+        
+        return users;
     }
     
     /**
@@ -140,21 +147,29 @@ public class WebService {
      */
     @GET
     @Path("followedBy/{user}")
-    @Produces("text/plain")
-    public List<String> getUsersFollowedBy(@PathParam("user") String username) throws RemoteException
-    {     
-        return service.getUsersFollowedBy(username);
+    @Produces( { MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON } )
+    public Users getUsersFollowedBy(@PathParam("user") String username) throws RemoteException
+    {
+        List<String> listUsers = service.getUsersFollowedBy(username);
+        
+        Users users = new Users();
+        for(int i = 0; i < listUsers.size(); i++) {
+            User user = new User(listUsers.get(i), "");
+            users.liste.add(user);
+        }
+        
+        return users;
     }
     
-    @GET
-    @Path("{follower}/follow/{followed}")
+    @PUT
+    @Path("follow/{follower}/{followed}")
     public void startFollowing(@PathParam("follower") String follower, @PathParam("followed") String followed) throws RemoteException
     {
         service.startFollowing(follower, followed);
     }
     
-    @GET
-    @Path("{follower}/stopFollow/{followed}")
+    @PUT
+    @Path("stopFollow/{follower}/{followed}")
     public void stopFollowing(@PathParam("follower") String follower, @PathParam("followed") String followed) throws RemoteException
     {
         service.stopFollowing(follower, followed);
@@ -166,8 +181,8 @@ public class WebService {
      * @param tweet
      * @throws RemoteException 
      */
-    @GET
-    @Path("{user}/tweet/{tweet}")
+    @PUT
+    @Path("createTweet/{user}/{tweet}")
     public void createNewTweet(@PathParam("user") String username, @PathParam("tweet") String tweet) throws RemoteException
     {
         service.createNewTweet(username, tweet);
@@ -181,9 +196,17 @@ public class WebService {
      */
     @GET
     @Path("tweets/{user}")
-    @Produces("text/plain")
-    public List<String> getTweetsOfUser(@PathParam("user") String username) throws RemoteException
+    @Produces( { MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON } )
+    public Tweets getTweetsOfUser(@PathParam("user") String username) throws RemoteException
     {
-        return service.getTweetsOfUser(username);
+        List<String> listTweets = service.getTweetsOfUser(username);
+        
+        Tweets tweets = new Tweets();
+        for(int i = 0; i < listTweets.size(); i++) {
+            Tweet tweet = new Tweet(username, listTweets.get(i));
+            tweets.liste.add(tweet);
+        }
+        
+        return tweets;
     }
 }
