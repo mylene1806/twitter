@@ -7,7 +7,7 @@ module corba
  
     interface ServiceCorba
     {     
-        string getUsers();
+        Users getUsers();
 
         void createNewUser(in User u);
         
