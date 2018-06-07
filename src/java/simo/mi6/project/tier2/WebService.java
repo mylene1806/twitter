@@ -42,16 +42,6 @@ public class WebService {
         System.setProperty("java.rmi.server.hostname", "86.76.4.24");        
         service = (TwitterDBService) Naming.lookup("rmi://86.76.4.24:3200/TwitterDBService");
     }
-
-    /**
-     * Retrieves representation of an instance of simo.mi6.project.tier2.WebService
-     * @return an instance of java.lang.String
-     */
-    @GET
-    @Produces(MediaType.APPLICATION_XML)
-    public String getXml() throws Exception {        
-        return "<test>Hello</test>";
-    }
     
     /***
      * Récupérer la liste des users
@@ -61,15 +51,8 @@ public class WebService {
     @GET
     @Path("users")
     @Produces("text/plain")
-    public String getUsers() throws Exception {
-        List<String> users = service.getAllUsers();
-        
-        String message = "";
-        for(int i = 0; i < users.size(); i++) {
-            message += ("\t"+ (i+1) + "\t" + users.get(i) + "\n");
-        }
-        
-        return message;
+    public List<String> getUsers() throws Exception {
+        return service.getAllUsers();
     }
     
     /**
