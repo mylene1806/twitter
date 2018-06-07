@@ -4,9 +4,9 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/IUT/NetBeansProjects/twitter/src/java/simo/mi6/project/tier2/WebService.java</file>
-            <file>file:/D:/IUT/NetBeansProjects/twitter/src/java/simo/mi6/project/tier1/Client.java</file>
+            <file>file:/D:/IUT/NetBeansProjects/twitter/src/java/simo/mi6/project/tier1/ClientTwitter.java</file>
+            <file>file:/D:/IUT/NetBeansProjects/twitter/src/java/common/User.java</file>
             <file>file:/D:/IUT/NetBeansProjects/twitter/src/java/simo/mi6/project/tier3/TwitterDBService.java</file>
-            <file>file:/D:/IUT/NetBeansProjects/twitter/src/conf/MANIFEST.MF</file>
         </group>
     </open-files>
 </project-private>
