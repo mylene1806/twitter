@@ -1,0 +1,30 @@
+module corba
+{
+    typedef string User;
+    typedef sequence<User> Users;
+    typedef string Tweet;
+    typedef sequence<Tweet> Tweets;
+ 
+    interface ServiceCorba
+    {     
+        string getUsers();
+
+        void createNewUser(in User u);
+        
+        string isUserPasswordCorrect(in User u);
+
+        void removeUser(in User u);
+
+        Users getUsersFollowing(in User u);
+
+        Users getUsersFollowedBy(in User u);
+
+        void startFollowing(in string follower, in string followed);
+
+        void stopFollowing(in string follower, in string followed);
+
+        void createNewTweet(in string username, in Tweet t);
+
+        Tweets getTweetsOfUser(in string username);
+    };
+};
