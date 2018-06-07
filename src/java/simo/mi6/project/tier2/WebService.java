@@ -5,8 +5,7 @@
  */
 package simo.mi6.project.tier2;
 
-import common.User;
-import common.Users;
+import common.*;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -126,7 +125,7 @@ public class WebService {
      */
     @GET
     @Path("followers/{user}")
-    @Produces("text/plain")
+    @Produces( { MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON } )
     public Users getUsersFollowing(@PathParam("user") String username) throws RemoteException
     {
         List<String> listUsers = service.getUsersFollowing(username);
@@ -148,7 +147,7 @@ public class WebService {
      */
     @GET
     @Path("followedBy/{user}")
-    @Produces("text/plain")
+    @Produces( { MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON } )
     public Users getUsersFollowedBy(@PathParam("user") String username) throws RemoteException
     {
         List<String> listUsers = service.getUsersFollowedBy(username);
@@ -197,9 +196,17 @@ public class WebService {
      */
     @GET
     @Path("tweets/{user}")
-    @Produces("text/plain")
-    public List<String> getTweetsOfUser(@PathParam("user") String username) throws RemoteException
+    @Produces( { MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON } )
+    public Tweets getTweetsOfUser(@PathParam("user") String username) throws RemoteException
     {
-        return service.getTweetsOfUser(username);
+        List<String> listTweets = service.getTweetsOfUser(username);
+        
+        Tweets tweets = new Tweets();
+        for(int i = 0; i < listTweets.size(); i++) {
+            Tweet tweet = new Tweet(username, listTweets.get(i));
+            tweets.liste.add(tweet);
+        }
+        
+        return tweets;
     }
 }
