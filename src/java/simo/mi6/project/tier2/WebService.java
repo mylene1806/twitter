@@ -161,14 +161,14 @@ public class WebService {
         return users;
     }
     
-    @GET
+    @PUT
     @Path("follow/{follower}/{followed}")
     public void startFollowing(@PathParam("follower") String follower, @PathParam("followed") String followed) throws RemoteException
     {
         service.startFollowing(follower, followed);
     }
     
-    @GET
+    @PUT
     @Path("stopFollow/{follower}/{followed}")
     public void stopFollowing(@PathParam("follower") String follower, @PathParam("followed") String followed) throws RemoteException
     {
@@ -181,7 +181,7 @@ public class WebService {
      * @param tweet
      * @throws RemoteException 
      */
-    @GET
+    @PUT
     @Path("createTweet/{user}/{tweet}")
     public void createNewTweet(@PathParam("user") String username, @PathParam("tweet") String tweet) throws RemoteException
     {
