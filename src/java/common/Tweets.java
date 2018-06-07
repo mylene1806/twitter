@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "Users")
-public class Users 
+@XmlRootElement(name = "Tweets")
+public class Tweets 
 {
 	@XmlElement
-	public ArrayList<User> liste = new ArrayList<User>();
+	public ArrayList<Tweet> liste = new ArrayList<Tweet>();
 }
