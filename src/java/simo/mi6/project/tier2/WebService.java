@@ -6,8 +6,10 @@
 package simo.mi6.project.tier2;
 
 import common.User;
+import common.Users;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -50,9 +52,17 @@ public class WebService {
      */
     @GET
     @Path("users")
-    @Produces("text/plain")
-    public List<String> getUsers() throws Exception {
-        return service.getAllUsers();
+    @Produces( { MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON } )
+    public Users getUsers() throws Exception {
+        List<String> listUsers = service.getAllUsers();
+        
+        Users users = new Users();
+        for(int i = 0; i < listUsers.size(); i++) {
+            User user = new User(listUsers.get(i), "");
+            users.liste.add(user);
+        }
+        
+        return users;
     }
     
     /**
@@ -150,6 +160,12 @@ public class WebService {
         service.stopFollowing(follower, followed);
     }
     
+    /**
+     * Créer un nouveau tweet
+     * @param username
+     * @param tweet
+     * @throws RemoteException 
+     */
     @GET
     @Path("{user}/tweet/{tweet}")
     public void createNewTweet(@PathParam("user") String username, @PathParam("tweet") String tweet) throws RemoteException
@@ -157,6 +173,12 @@ public class WebService {
         service.createNewTweet(username, tweet);
     }
     
+    /**
+     * Récupérer les tweets d'un user
+     * @param username
+     * @return
+     * @throws RemoteException 
+     */
     @GET
     @Path("tweets/{user}")
     @Produces("text/plain")
