@@ -127,9 +127,17 @@ public class WebService {
     @GET
     @Path("followers/{user}")
     @Produces("text/plain")
-    public List<String> getUsersFollowing(@PathParam("user") String username) throws RemoteException
-    {        
-        return service.getUsersFollowing(username);
+    public Users getUsersFollowing(@PathParam("user") String username) throws RemoteException
+    {
+        List<String> listUsers = service.getUsersFollowing(username);
+        
+        Users users = new Users();
+        for(int i = 0; i < listUsers.size(); i++) {
+            User user = new User(listUsers.get(i), "");
+            users.liste.add(user);
+        }
+        
+        return users;
     }
     
     /**
@@ -141,9 +149,17 @@ public class WebService {
     @GET
     @Path("followedBy/{user}")
     @Produces("text/plain")
-    public List<String> getUsersFollowedBy(@PathParam("user") String username) throws RemoteException
-    {     
-        return service.getUsersFollowedBy(username);
+    public Users getUsersFollowedBy(@PathParam("user") String username) throws RemoteException
+    {
+        List<String> listUsers = service.getUsersFollowedBy(username);
+        
+        Users users = new Users();
+        for(int i = 0; i < listUsers.size(); i++) {
+            User user = new User(listUsers.get(i), "");
+            users.liste.add(user);
+        }
+        
+        return users;
     }
     
     @GET
