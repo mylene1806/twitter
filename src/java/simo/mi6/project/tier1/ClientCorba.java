@@ -30,8 +30,8 @@ public class ClientCorba {
 
 		ServiceCorba serviceCorba = ServiceCorbaHelper.narrow(namingContext.resolve_str("ServiceCorba"));
 
-		String users = serviceCorba.getUsers();
-                System.out.println(users);
+		String[] users = serviceCorba.getUsers();
+                System.out.println("test");
 
 	}
 

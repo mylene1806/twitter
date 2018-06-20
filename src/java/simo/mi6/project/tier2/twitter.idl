@@ -9,9 +9,9 @@ module corba
     {     
         Users getUsers();
 
-        void createNewUser(in User u);
+        void createNewUser(in string username, in string password);
         
-        string isUserPasswordCorrect(in User u);
+        string isUserPasswordCorrect(in string username, in string password);
 
         void removeUser(in User u);
 

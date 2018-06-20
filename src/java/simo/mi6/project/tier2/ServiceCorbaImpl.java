@@ -5,6 +5,8 @@
  */
 package simo.mi6.project.tier2;
 
+import common.Tweet;
+import common.Tweets;
 import corba.ServiceCorbaPOA;
 import java.rmi.Naming;
 import java.util.List;
@@ -41,7 +43,8 @@ public class ServiceCorbaImpl extends ServiceCorbaPOA {
      /**
      * Creates a new instance of ServiceTwitter
      */
-    public ServiceCorbaImpl() throws Exception {
+    public ServiceCorbaImpl() throws Exception 
+    {
         // Appel au service RMI
         System.setProperty("java.rmi.server.hostname", "86.76.4.24");        
         service = (TwitterDBService) Naming.lookup("rmi://86.76.4.24:3200/TwitterDBService");
@@ -51,11 +54,11 @@ public class ServiceCorbaImpl extends ServiceCorbaPOA {
     
     
     @Override
-    public String[] getUsers() {
-    
-        List<String> listUsers;
-        
+    public String[] getUsers() 
+    {
+        List<String> listUsers;        
         String[] users = new String[1];
+        
         try {
             listUsers = service.getAllUsers(); 
             int size = listUsers.size();
@@ -71,48 +74,135 @@ public class ServiceCorbaImpl extends ServiceCorbaPOA {
     }
 
     @Override
-    public void createNewUser(String u) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void createNewUser(String username, String password) 
+    {      
+        try {
+            service.createNewUser(username, password);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ServiceCorbaImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+
+    @Override
+    public String isUserPasswordCorrect(String username, String password)
+    {
+        boolean result = false;
+        try {
+            result = service.isUserPasswordCorrect(username, password);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ServiceCorbaImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return Boolean.toString(result);
     }
 
     @Override
-    public String isUserPasswordCorrect(String u) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void removeUser(String username) 
+    {
+        try {
+            service.removeUser(username);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ServiceCorbaImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
-    public void removeUser(String u) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String[] getUsersFollowing(String username) 
+    {
+        List<String> listUsersFollowing;        
+        String[] usersFollowing = new String[1];
+        
+        try {
+            listUsersFollowing = service.getUsersFollowing(username); 
+            int size = listUsersFollowing.size();
+            usersFollowing = new String[size];
+            for(int i = 0; i < listUsersFollowing.size(); i++) {
+            usersFollowing[i] = listUsersFollowing.get(i);
+            }           
+        } catch (RemoteException ex) {
+            Logger.getLogger(ServiceCorbaImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return usersFollowing;     
     }
 
     @Override
-    public String[] getUsersFollowing(String u) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String[] getUsersFollowedBy(String username) 
+    {        
+        List<String> listUsersFollowedBy;        
+        String[] usersFollowedBy = new String[1];
+        
+        try {
+            listUsersFollowedBy = service.getUsersFollowing(username); 
+            int size = listUsersFollowedBy.size();
+            usersFollowedBy = new String[size];
+            for(int i = 0; i < listUsersFollowedBy.size(); i++) {
+            usersFollowedBy[i] = listUsersFollowedBy.get(i);
+            }           
+        } catch (RemoteException ex) {
+            Logger.getLogger(ServiceCorbaImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return usersFollowedBy;    
     }
 
     @Override
-    public String[] getUsersFollowedBy(String u) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void startFollowing(String follower, String followed) 
+    {
+        try {
+            service.startFollowing(follower, followed);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ServiceCorbaImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
-    public void startFollowing(String follower, String followed) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void stopFollowing(String follower, String followed) 
+    {
+        try {
+            service.stopFollowing(follower, followed);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ServiceCorbaImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
-    public void stopFollowing(String follower, String followed) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void createNewTweet(String username, String tweet) 
+    {
+        try {
+            service.createNewTweet(username, tweet);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ServiceCorbaImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
+    /**
+     *
+     * @param username
+     * @return
+     * @throws Exception
+     */
     @Override
-    public void createNewTweet(String username, String t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public String[] getTweetsOfUser(String username) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
+    public String[] getTweetsOfUser(String username)
+    {
+        List<String> listTweets;
+        String[] tweets = new String[0];
+        int size = 0;
+        try 
+        {
+            listTweets = service.getTweetsOfUser(username);
+            size = listTweets.size();
+            tweets = new String[size];
+                                
+            for(int i = 0; i < listTweets.size(); i++) 
+            {           
+                tweets[i]=listTweets.get(i);
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(ServiceCorbaImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return tweets;
+    }   
 }
