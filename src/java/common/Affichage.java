@@ -20,7 +20,7 @@ public class Affichage {
     }
     
     public String menuPrincipal(){
-        System.out.println("-----------------------------");
+        System.out.println("\n-----------------------------");
         System.out.println("Que souhaitez vous faire ?");
         System.out.println("1 - M'abonner à un utilisateur");
         System.out.println("2 - Me désabonner d'un utilisateur");
@@ -61,7 +61,7 @@ public class Affichage {
     }
     
     public String[] creerCompte(){
-        String[] logins = null;
+        String[] logins = new String[2];
         
         System.out.println("CREER UN COMPTE");
         System.out.print("Login: ");
@@ -70,6 +70,15 @@ public class Affichage {
         logins[1] = s.next();
         
         return logins;
+    }
+    
+    public String creerTweet(){
+        String tweet;
+        
+        System.out.println("\n-----------------------\nECRIRE UN TWEET");
+        tweet = s.next();
+        
+        return tweet;
     }
     /*
     public int choisirUser(){

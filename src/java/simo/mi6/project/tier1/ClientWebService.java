@@ -11,8 +11,14 @@ import common.*;
 import corba.ServiceCorba;
 import corba.ServiceCorbaHelper;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Properties;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamSource;
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContextExt;
 import org.omg.CosNaming.NamingContextExtHelper;
@@ -82,24 +88,50 @@ public class ClientWebService
         return Boolean.valueOf(webService.path("create").put(String.class, user));
     }
     
-    public static void menuPrincipal(){
+    public static void consulterTweet(User userTweet) throws JAXBException{
+        String tweets_xml = webService.path("tweets/" + userTweet.getUsername()).get(String.class);
+                
+        // Initialisation du convertisseur XML <-> Objet Tweets
+        JAXBContext context = JAXBContext.newInstance(Tweets.class); 
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+        // Transformation et obtention d’un objet Tweets
+        StringBuffer xmlStr = new StringBuffer(tweets_xml);
+        JAXBElement<Tweets> root = unmarshaller.unmarshal(
+        new StreamSource(new StringReader(xmlStr.toString())),   
+        Tweets.class);
+        Tweets tweets = root.getValue();
+        System.out.println("-----------TWEETS-----------");
+        for(int i = 0; i < tweets.liste.size(); i++) 
+        {
+            System.out.println(userTweet.getUsername() + " : " + tweets.liste.get(i).getMessage());
+            System.out.println("----------------");
+        }  
+    }
+    
+    
+    public static void menuPrincipal() throws JAXBException{
         // CHOIX DE L'ACTION
         String x = affichage.menuPrincipal();
         Scanner s = new Scanner(System.in);
+        Users users;
         
         switch(x) 
         {
             case "1":
                 System.out.println("\n-----------------------\nS'ABBONNER A UN UTILISATEUR.");
-                Users users = webService.path("users").get(Users.class);
+                users = webService.path("users").get(Users.class);
                 for(int i = 0; i < users.liste.size(); i++) 
                 {
                     System.out.println(i+1 + "\t" + users.liste.get(i).getUsername());
 		} 
-                System.out.print("Choisir un utilisateur : ");
+                System.out.print("Choisir un utilisateur (retour = 0): ");
                 int y = s.nextInt(); 
-                users.liste.get(y-1);
-                webService.path("follow/" + user.getUsername() + "/" + users.liste.get(y-1).getUsername()).put();
+                if(y != 0){
+                    users.liste.get(y-1);
+                    webService.path("follow/" + user.getUsername() + "/" + users.liste.get(y-1).getUsername()).put();
+                }else{
+                    menuPrincipal();
+                }
                 break;
             case "2":
                 System.out.println("\n-----------------------\nSE DESABONNER A UN UTILISATEUR.");
@@ -109,44 +141,42 @@ public class ClientWebService
                 {
                     System.out.println(i+1 + "\t" + users.liste.get(i).getUsername());
 		} 
-                System.out.print("Choisir un utilisateur : ");
+                System.out.print("Choisir un utilisateur (retour = 0): ");
                 y = s.nextInt(); 
-                users.liste.get(y-1);
-                webService.path("stopFollow/" + user.getUsername() + "/" + users.liste.get(y-1).getUsername()).put();
+                if(y != 0){
+                    users.liste.get(y-1);
+                    webService.path("stopFollow/" + user.getUsername() + "/" + users.liste.get(y-1).getUsername()).put();
+                }else{
+                    menuPrincipal();
+                }
                 break;
             case "3":
                 System.out.println("\n-----------------------\nLISTE DES ABONNEMENTS.");
                 users = webService.path("followedBy/" + user.getUsername()).get(Users.class);
                 for(int i = 0; i < users.liste.size(); i++) 
                 {
-                    System.out.println(i + "\t" + users.liste.get(i).getUsername());
+                    System.out.println(i+1 + "\t" + users.liste.get(i).getUsername());
 		} 
-                System.out.print("Choisir un utilisateur : ");
+                System.out.print("Choisir un utilisateur (retour = 0): ");
                 y = s.nextInt(); 
-                users.liste.get(y-1);
-                Tweets tweets = webService.path("tweets/" + users.liste.get(y-1).getUsername()).get(Tweets.class); 
-                for(int i = 0; i < tweets.liste.size(); i++) 
-                {
-                    System.out.println(i + "\t" + tweets.liste.get(i).getMessage());
-                    System.out.println("----------------");
-		} 
-                
-                for(int i = 0; i < users.liste.size(); i++) 
-                {
-                    System.out.println(i + "\t" + users.liste.get(i).getUsername());
-		} 
+                if(y != 0){
+                    users.liste.get(y-1);
+                    User userTweet = users.liste.get(y-1);
+                    consulterTweet(userTweet);
+                }else{
+                    menuPrincipal();
+                }
                 
                 //System.out.print("Tweets de "+ user +" : ");
                 break;
             case "4":
                 System.out.println("\n-----------------------\nMES TWEETS");
-                System.out.println(webService.path("tweets/" + user.getUsername()).get(String.class));
+                consulterTweet(user);
                 break; 
             case "5":
-                System.out.println("\n-----------------------\nECRIRE UN TWEET");
-                x = s.next();
-                //x = s.nextLine();
-                webService.path("createTweet/" + user.getUsername() + "/" + x).put();
+                
+                String tweet = affichage.creerTweet();
+                webService.path("createTweet/" + user.getUsername() + "/" + tweet).put();
                 break;
             case "6":
                 System.out.println(webService.path("remove").delete(String.class, user));
