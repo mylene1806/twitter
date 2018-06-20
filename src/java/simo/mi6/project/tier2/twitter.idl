@@ -9,7 +9,7 @@ module corba
     {     
         Users getUsers();
 
-        void createNewUser(in string username, in string password);
+        string createNewUser(in string username, in string password);
         
         string isUserPasswordCorrect(in string username, in string password);
 
