@@ -20,7 +20,7 @@ public class Affichage {
     }
     
     public String menuPrincipal(){
-        System.out.println("\n-----------------------------");
+        System.out.println("\n\n\n--------------------MENU--------------------");
         System.out.println("Que souhaitez vous faire ?");
         System.out.println("1 - M'abonner à un utilisateur");
         System.out.println("2 - Me désabonner d'un utilisateur");
@@ -28,17 +28,16 @@ public class Affichage {
         System.out.println("4 - Consulter mes tweets");
         System.out.println("5 - Ecrire un tweet");
         System.out.println("6 - Supprimer mon compte");
-        System.out.println("7 - Déconnexion");
+        System.out.println("0 - Quitter");
         System.out.print("Choix : ");
         String x = s.next();  
-        System.out.println("-----------------------------");
         
         return x;
     }
     
     public String menuConnexion(){
         String x;
-        System.out.println("BONJOUR");
+        System.out.println("\n\n\n----------AUTHENTIFICATION----------");
         System.out.println("1 - Me connecter");
         System.out.println("2 - Créer un compte");
         System.out.print("Choix : ");
@@ -50,7 +49,7 @@ public class Affichage {
     public String[] seConnecter(){
         String[] logins = new String[2];
         
-        System.out.println("SE CONNECTER");
+        System.out.println("\n\n\n----------CONNEXION----------");
         System.out.print("Login: ");
         logins[0] = s.next();
         System.out.print("Password: ");
@@ -73,21 +72,17 @@ public class Affichage {
     }
     
     public String creerTweet(){
-        String tweet;
+        String tweet = "";
         
-        System.out.println("\n-----------------------\nECRIRE UN TWEET");
-        tweet = s.next();
+        System.out.println("\n\n\n----------ECRIRE UN TWEET----------");
+        
+        while (tweet.length() < 1 || tweet.length() > 280){
+            tweet = s.nextLine ();
+            if (tweet.length() > 280){
+                System.out.println("/!\\ " + tweet.length() + " caractère - Tweet trop long !! 280 caractères max autorisés.");
+            }
+        }
         
         return tweet;
     }
-    /*
-    public int choisirUser(){
-        
-        
-        
-        return x;
-    }
-    */
-    
-    
 }

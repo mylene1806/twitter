@@ -34,6 +34,7 @@ public class ClientWebService
     private static WebResource webService = null;
     private static User user;
     private static Affichage affichage = new Affichage();
+    public static Boolean connecte = false;
     
     public static void main(String [] args) throws Exception
     {
@@ -43,12 +44,7 @@ public class ClientWebService
         
         boolean connecte = false;
         
-        if (accueilAuthentification()){
-            System.out.println("Connecté\n");
-            connecte = true;
-        } else {
-            System.out.println("/!\\ Echec connexion !");
-        }
+        connecte = accueilAuthentification();
         
         while(connecte){
             menuPrincipal();
@@ -56,7 +52,7 @@ public class ClientWebService
         
     }
     
-    public static boolean accueilAuthentification(){
+    public static Boolean accueilAuthentification(){
         String x;
         Boolean connexion = false;
         x = affichage.menuConnexion();
@@ -72,6 +68,14 @@ public class ClientWebService
                 System.out.println("Choix incorrecte.");
                 System.out.println();
         }
+        
+        if (connexion){
+            System.out.println("Connecté\n");
+            connecte = true;
+        } else {
+            System.out.println("/!\\ Echec connexion !");
+        }
+        
         return connexion;
     }
     
@@ -100,16 +104,15 @@ public class ClientWebService
         new StreamSource(new StringReader(xmlStr.toString())),   
         Tweets.class);
         Tweets tweets = root.getValue();
-        System.out.println("-----------TWEETS-----------");
+        System.out.println("\n\n\n----------TWEETS----------");
         for(int i = 0; i < tweets.liste.size(); i++) 
         {
-            System.out.println(userTweet.getUsername() + " : " + tweets.liste.get(i).getMessage());
-            System.out.println("----------------");
+            System.out.println(userTweet.getUsername() + ": " + tweets.liste.get(i).getMessage());
         }  
     }
     
     
-    public static void menuPrincipal() throws JAXBException{
+    public static void menuPrincipal() throws JAXBException, IOException{
         // CHOIX DE L'ACTION
         String x = affichage.menuPrincipal();
         Scanner s = new Scanner(System.in);
@@ -118,7 +121,7 @@ public class ClientWebService
         switch(x) 
         {
             case "1":
-                System.out.println("\n-----------------------\nS'ABBONNER A UN UTILISATEUR.");
+                System.out.println("\n\n\n----------S'ABBONNER A UN UTILISATEUR----------");
                 users = webService.path("users").get(Users.class);
                 for(int i = 0; i < users.liste.size(); i++) 
                 {
@@ -134,7 +137,7 @@ public class ClientWebService
                 }
                 break;
             case "2":
-                System.out.println("\n-----------------------\nSE DESABONNER A UN UTILISATEUR.");
+                System.out.println("\n\n\n----------SE DESABONNER A UN UTILISATEUR----------");
                 users = webService.path("followedBy/" + user.getUsername()).get(Users.class);
                 
                 for(int i = 0; i < users.liste.size(); i++) 
@@ -151,7 +154,7 @@ public class ClientWebService
                 }
                 break;
             case "3":
-                System.out.println("\n-----------------------\nLISTE DES ABONNEMENTS.");
+                System.out.println("\n\n\n----------LISTE DES ABONNEMENTS----------");
                 users = webService.path("followedBy/" + user.getUsername()).get(Users.class);
                 for(int i = 0; i < users.liste.size(); i++) 
                 {
@@ -170,7 +173,6 @@ public class ClientWebService
                 //System.out.print("Tweets de "+ user +" : ");
                 break;
             case "4":
-                System.out.println("\n-----------------------\nMES TWEETS");
                 consulterTweet(user);
                 break; 
             case "5":
@@ -179,10 +181,11 @@ public class ClientWebService
                 webService.path("createTweet/" + user.getUsername() + "/" + tweet).put();
                 break;
             case "6":
-                System.out.println(webService.path("remove").delete(String.class, user));
+                webService.path("remove/"+user.getUsername()).delete();
+                System.exit(0);
                 break;
-            case "7":
-                System.out.println("Lancement corba.");
+            case "0":
+                System.exit(0);
                 break;
             default:
                 System.out.println("Choix incorrecte.");

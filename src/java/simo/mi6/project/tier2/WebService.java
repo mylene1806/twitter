@@ -106,14 +106,11 @@ public class WebService {
      * @throws RemoteException 
      */
     @DELETE
-    @Path("remove")
-    @Consumes(MediaType.APPLICATION_XML)
-    @Produces("text/plain")
-    public void removeUser(JAXBElement<User> u) throws RemoteException
+    @Path("remove/{user}")
+    //@Consumes(MediaType.APPLICATION_XML)
+    //@Produces("text/plain")
+    public void removeUser(@PathParam("user") String username) throws RemoteException
     {
-        User user = u.getValue();
-        String username = user.getUsername();
-        
         service.removeUser(username);
     }
     
