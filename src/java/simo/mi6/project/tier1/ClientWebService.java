@@ -32,6 +32,9 @@ public class ClientWebService
     public static void main(String [] args) throws Exception
     {
         
+        webService = Client.create().resource("http://localhost:8080/twitter");
+        
+        
         boolean connecte = false;
         
         if (accueilAuthentification()){
