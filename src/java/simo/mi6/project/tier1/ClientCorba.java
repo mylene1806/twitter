@@ -103,7 +103,9 @@ public class ClientCorba {
                 }
                 System.out.print("Choisir un utilisateur : ");
                 int y = s.nextInt();
-                serviceCorba.startFollowing(user.getUsername(), users[y - 1]);
+                System.out.println(user.getUsername());
+                System.out.println(users[y-1]);
+                serviceCorba.startFollowing(user.getUsername(), users[y-1]);
                 break;
             case "2":
                 System.out.println("\n-----------------------\nSE DESABONNER A UN UTILISATEUR.");
