@@ -74,13 +74,14 @@ public class ServiceCorbaImpl extends ServiceCorbaPOA {
     }
 
     @Override
-    public void createNewUser(String username, String password) 
+    public String createNewUser(String username, String password) 
     {      
         try {
             service.createNewUser(username, password);
         } catch (RemoteException ex) {
             Logger.getLogger(ServiceCorbaImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return "true";
     }
 
 
