@@ -11,8 +11,14 @@ import common.User;
 import common.Users;
 import corba.ServiceCorba;
 import corba.ServiceCorbaHelper;
+import java.io.StringReader;
 import java.util.Properties;
 import java.util.Scanner;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamSource;
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContextExt;
 import org.omg.CosNaming.NamingContextExtHelper;
@@ -85,6 +91,24 @@ public class ClientCorba {
         return serviceCorba.createNewUser(logins[0], logins[1]);
     }
 
+//    public static void consulterTweet(String userTweet) throws JAXBException{
+//        String[] tweets_xml = serviceCorba.getTweetsOfUser(userTweet);
+//                
+//        // Initialisation du convertisseur XML <-> Objet Tweets
+//        JAXBContext context = JAXBContext.newInstance(String[].class); 
+//        Unmarshaller unmarshaller = context.createUnmarshaller();
+//        // Transformation et obtention d’un objet Tweets
+//        StringBuffer xmlStr = new StringBuffer(tweets_xml);
+//        JAXBElement<Tweets> root = unmarshaller.unmarshal(
+//        new StreamSource(new StringReader(xmlStr.toString())),   
+//        Tweets.class);
+//        Tweets tweets = root.getValue();
+//        System.out.println("\n\n\n----------TWEETS----------");
+//        for(int i = 0; i < tweets.liste.size(); i++) 
+//        {
+//            System.out.println(userTweet.getUsername() + ": " + tweets.liste.get(i).getMessage());
+//        }  
+//    }
     public static void menuPrincipal() {
         // CHOIX DE L'ACTION
         String x = affichage.menuPrincipal();
@@ -130,16 +154,15 @@ public class ClientCorba {
                 System.out.println("\n-----------------------\nLISTE DES ABONNEMENTS.");
                 usersFollowed = serviceCorba.getUsersFollowedBy(user.getUsername());
                 for (int i = 0; i < usersFollowed.length; i++) {
-                    System.out.println(i+1 + "\t" + usersFollowed[i]);
+                    System.out.println(i + 1 + "\t" + usersFollowed[i]);
                 }
                 System.out.print("Choisir un utilisateur : ");
                 y = s.nextInt();
                 if (0 < y && y <= usersFollowed.length) {
-                    String[] tweets = serviceCorba.getTweetsOfUser(usersFollowed[y-1]);
-                    System.out.print("Tweets de "+ usersFollowed[y-1] +" : "); 
-                    for (int j = 0; j < tweets.length; j++) 
-                    {
-                        System.out.println("\n" + j+1 + "\t" + tweets[j]);
+                    String[] tweets = serviceCorba.getTweetsOfUser(usersFollowed[y - 1]);
+                    System.out.print("Tweets de " + usersFollowed[y - 1] + " : ");
+                    for (int j = 0; j < tweets.length; j++) {
+                        System.out.println("\n" + j + 1 + "\t" + tweets[j]);
                         System.out.println("----------------");
                     }
                 }
@@ -147,16 +170,22 @@ public class ClientCorba {
                 break;
             case "4":
                 System.out.println("\n-----------------------\nMES TWEETS");
-//                System.out.println(webService.path("tweets/" + user.getUsername()).get(String.class));
+                String[] tweets = serviceCorba.getTweetsOfUser(user.getUsername());
+                System.out.print("Tweets de " + user.getUsername() + " : ");
+                if (tweets.length > 0) {
+                    for (int j = 0; j < tweets.length; j++) {
+                        System.out.println("\n" + j + 1 + "\t" + tweets[j]);
+                        System.out.println("----------------");
+                    }
+                }
                 break;
             case "5":
-                System.out.println("\n-----------------------\nECRIRE UN TWEET");
-//                x = s.next();
-//                //x = s.nextLine();
-//                webService.path("createTweet/" + user.getUsername() + "/" + x).put();
+                String tweet = affichage.creerTweet();
+                serviceCorba.createNewTweet(user.getUsername(), tweet);
                 break;
             case "6":
-//                System.out.println(webService.path("remove").delete(String.class, user));
+                serviceCorba.removeUser(user.getUsername());
+                System.exit(0);
                 break;
             case "0":
                 System.exit(0);
