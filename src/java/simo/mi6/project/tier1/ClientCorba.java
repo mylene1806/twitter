@@ -91,24 +91,6 @@ public class ClientCorba {
         return serviceCorba.createNewUser(logins[0], logins[1]);
     }
 
-//    public static void consulterTweet(String userTweet) throws JAXBException{
-//        String[] tweets_xml = serviceCorba.getTweetsOfUser(userTweet);
-//                
-//        // Initialisation du convertisseur XML <-> Objet Tweets
-//        JAXBContext context = JAXBContext.newInstance(String[].class); 
-//        Unmarshaller unmarshaller = context.createUnmarshaller();
-//        // Transformation et obtention d’un objet Tweets
-//        StringBuffer xmlStr = new StringBuffer(tweets_xml);
-//        JAXBElement<Tweets> root = unmarshaller.unmarshal(
-//        new StreamSource(new StringReader(xmlStr.toString())),   
-//        Tweets.class);
-//        Tweets tweets = root.getValue();
-//        System.out.println("\n\n\n----------TWEETS----------");
-//        for(int i = 0; i < tweets.liste.size(); i++) 
-//        {
-//            System.out.println(userTweet.getUsername() + ": " + tweets.liste.get(i).getMessage());
-//        }  
-//    }
     public static void menuPrincipal() {
         // CHOIX DE L'ACTION
         String x = affichage.menuPrincipal();
