@@ -39,9 +39,6 @@ public class ClientCorba {
 
         serviceCorba = ServiceCorbaHelper.narrow(namingContext.resolve_str("ServiceCorba"));
 
-        String[] users = serviceCorba.getUsers();
-        System.out.println("test");
-
         boolean connecte = false;
 
         if (accueilAuthentification().equals("true")) {
@@ -93,6 +90,7 @@ public class ClientCorba {
         String x = affichage.menuPrincipal();
         Scanner s = new Scanner(System.in);
         String[] users;
+        String[] usersFollowed;
 
         switch (x) {
             case "1":
@@ -103,42 +101,49 @@ public class ClientCorba {
                 }
                 System.out.print("Choisir un utilisateur : ");
                 int y = s.nextInt();
-                System.out.println(user.getUsername());
-                System.out.println(users[y-1]);
-                serviceCorba.startFollowing(user.getUsername(), users[y-1]);
+                if (0 < y && y <= users.length) {
+                    serviceCorba.startFollowing(user.getUsername(), users[y - 1]);
+                } else {
+                    System.out.println("Saisie incorrecte");
+                    menuPrincipal();
+                }
                 break;
+
             case "2":
                 System.out.println("\n-----------------------\nSE DESABONNER A UN UTILISATEUR.");
-                users = serviceCorba.getUsersFollowedBy(user.getUsername());
-                for(int i = 0; i < users.length; i++) 
-                {
-                    System.out.println(i+1 + "\t" + users[i]);
-		} 
+                System.out.println(user.getUsername());
+                usersFollowed = serviceCorba.getUsersFollowedBy(user.getUsername());
+                for (int i = 0; i < usersFollowed.length; i++) {
+                    System.out.println(i + 1 + "\t" + usersFollowed[i]);
+                }
                 System.out.print("Choisir un utilisateur : ");
-                y = s.nextInt(); 
-                serviceCorba.stopFollowing(user.getUsername(), users[y-1]);
+                y = s.nextInt();
+                if (0 < y && y <= usersFollowed.length) {
+                    serviceCorba.stopFollowing(user.getUsername(), usersFollowed[y - 1]);
+                } else {
+                    System.out.println("Saisie incorrecte");
+                    menuPrincipal();
+                }
                 break;
+
             case "3":
                 System.out.println("\n-----------------------\nLISTE DES ABONNEMENTS.");
-                users = serviceCorba.getUsersFollowedBy(user.getUsername());
-                for(int i = 0; i < users.length; i++) 
-                {
-                    System.out.println(i + "\t" + users[i]);
-		} 
+                usersFollowed = serviceCorba.getUsersFollowedBy(user.getUsername());
+                for (int i = 0; i < usersFollowed.length; i++) {
+                    System.out.println(i+1 + "\t" + usersFollowed[i]);
+                }
                 System.out.print("Choisir un utilisateur : ");
-                y = s.nextInt(); 
-                String[] tweets = serviceCorba.getTweetsOfUser(users[y-1]);
-                for(int i = 0; i < tweets.length; i++) 
-                {
-                    System.out.println(i + "\t" + tweets[i]);
-                    System.out.println("----------------");
-		} 
-                
-                for(int i = 0; i < users.length; i++) 
-                {
-                    System.out.println(i + "\t" + users[i]);
-		}                 
-                //System.out.print("Tweets de "+ user +" : ");  // déjà commenté
+                y = s.nextInt();
+                if (0 < y && y <= usersFollowed.length) {
+                    String[] tweets = serviceCorba.getTweetsOfUser(usersFollowed[y-1]);
+                    System.out.print("Tweets de "+ usersFollowed[y-1] +" : "); 
+                    for (int j = 0; j < tweets.length; j++) 
+                    {
+                        System.out.println("\n" + j+1 + "\t" + tweets[j]);
+                        System.out.println("----------------");
+                    }
+                }
+
                 break;
             case "4":
                 System.out.println("\n-----------------------\nMES TWEETS");
@@ -153,8 +158,8 @@ public class ClientCorba {
             case "6":
 //                System.out.println(webService.path("remove").delete(String.class, user));
                 break;
-            case "7":
-//                System.out.println("Lancement corba.");
+            case "0":
+                System.exit(0);
                 break;
             default:
                 System.out.println("Choix incorrecte.");
