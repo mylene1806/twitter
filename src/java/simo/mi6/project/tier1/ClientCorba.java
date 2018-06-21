@@ -143,20 +143,22 @@ public class ClientCorba {
                 if (0 < y && y <= usersFollowed.length) {
                     String[] tweets = serviceCorba.getTweetsOfUser(usersFollowed[y - 1]);
                     System.out.print("Tweets de " + usersFollowed[y - 1] + " : ");
-                    for (int j = 0; j < tweets.length; j++) {
-                        System.out.println("\n" + j + 1 + "\t" + tweets[j]);
-                        System.out.println("----------------");
+                    if (tweets.length > 0) {
+                        for (int j = 0; j < tweets.length; j++) {
+                            System.out.println("\n" + j + 1 + "\t" + tweets[j]);
+                            System.out.println("----------------");
+                        }
                     }
                 }
 
                 break;
             case "4":
-                System.out.println("\n-----------------------\nMES TWEETS");
+                System.out.println("\n-----------------------\nMES TWEETS\n");
                 String[] tweets = serviceCorba.getTweetsOfUser(user.getUsername());
-                System.out.print("Tweets de " + user.getUsername() + " : ");
+//                System.out.print("Tweets de " + user.getUsername() + " : ");
                 if (tweets.length > 0) {
                     for (int j = 0; j < tweets.length; j++) {
-                        System.out.println("\n" + j + 1 + "\t" + tweets[j]);
+                        System.out.println(j + 1 + "\t" + tweets[j]);
                         System.out.println("----------------");
                     }
                 }
