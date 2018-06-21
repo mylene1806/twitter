@@ -1,0 +1,17 @@
+Projet Twitter 
+
+Mylène Lalechère
+Julien Duchesne
+Noémie Turc
+
+Nous avons réalisé un fichier client pour Corba et un pour le Webservice
+
+Une partie du code est factorisée et se trouve dans le Package Common
+
+
+Partie  CORBA :
+
+Nous avons un bug : erreur à l'affichage des tweets des autres utilisateurs.
+C'est pourtant la même méthode qui est utilisée pour afficher ses propres tweets et dans ce cas là, elle fonctionne.
+
+
