@@ -9,9 +9,19 @@ Nous avons réalisé un fichier client pour Corba et un pour le Webservice
 Une partie du code est factorisée et se trouve dans le Package Common
 
 
+Partie Webservice :
+
+Nous avons remarqué des problèmes de connexion aléatoires qui semblent liés au réseau. Parfois, même en partage de connexion via un téléphone portable, la connexion ne fonctionne pas.
+Sinon, une fois connecté, l'application fonctionne.
+
+
 Partie  CORBA :
 
 Nous avons un bug : erreur à l'affichage des tweets des autres utilisateurs.
-C'est pourtant la même méthode qui est utilisée pour afficher ses propres tweets et dans ce cas là, elle fonctionne.
+C'est pourtant la même méthode qui est utilisée pour afficher ses propres tweets et dans ce cas là, elle fonctionne. Si vous arrivez à trouver le problème, nous sommes intéressés de comprendre car nous avons cherché un moment...
+Sinon, les autres fonctionnalités sont opérationnelles.
+
+
+Bonne continuation.
 
 
